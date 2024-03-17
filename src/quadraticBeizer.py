@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 beizerPoint = []
-lc = None
-plt.grid(True)
+
+# plt.grid(True)
 plt.title(f'Plot of Data Points - Iteration')
 plt.xlabel('X')
 plt.ylabel('Y')
@@ -12,19 +12,22 @@ def getMidPoint(P1, P2):
     return ((P1[0] + P2[0]) / 2), ((P1[1] + P2[1]) / 2)
 
 
-def PopulateBeizerPoints(ctrl1, ctrl2, ctrl3, nIter, currIter=0):
-    if (currIter < nIter):
+def PopulateBeizerPoints(ctrl1, ctrl2, ctrl3, limIter, currIter=0):
+    if (currIter < limIter):
         midP1 = getMidPoint(ctrl1, ctrl2)
         midP2 = getMidPoint(ctrl2, ctrl3)
+
         midP3 = getMidPoint(midP1, midP2)
 
         plt.plot([ctrl1[0], midP1[0], midP2[0], ctrl3[0]], [ctrl1[1], midP1[1], midP2[1], ctrl3[1]], color=lc[currIter], marker='o', linestyle='-')
         
-        PopulateBeizerPoints(ctrl1, midP1, midP3, nIter, currIter+1)
-        beizerPoint.append(midP3)
-        PopulateBeizerPoints(midP3, midP2, ctrl3, nIter, currIter+1)
+        PopulateBeizerPoints(ctrl1, midP1, midP3, limIter, currIter+1)
 
-        plt.pause(0.5)
+        beizerPoint.append(midP3)
+        
+        PopulateBeizerPoints(midP3, midP2, ctrl3, limIter, currIter+1)
+
+        plt.pause(0.0005)
 
 
 if __name__ == "__main__":
@@ -50,3 +53,5 @@ if __name__ == "__main__":
     
     plt.plot([point[0] for point in beizerPoint], [point[1] for point in beizerPoint], 'ro-')
     plt.show()
+
+    print(beizerPoint, len(beizerPoint))
