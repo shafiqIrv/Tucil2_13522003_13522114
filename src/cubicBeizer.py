@@ -20,15 +20,18 @@ def PopulateBeizerPoints(ctrl1, ctrl2, ctrl3, ctrl4, nIter, currIter=0):
 
         midP4 = getMidPoint(midP1, midP2)
         midP5 = getMidPoint(midP2, midP3)
-
-        # plt.plot([ctrl1[0], midP1[0], midP2[0], midP3[0], ctrl4[0]], [ctrl1[1], midP1[1], midP2[1], midP3[1], ctrl4[1]], color=lc[currIter], marker='o', linestyle='-')
         
-        PopulateBeizerPoints(ctrl1, midP1, midP4, midP2, nIter, currIter+1)
-        beizerPoint.append(midP4)
-        beizerPoint.append(midP5)
-        PopulateBeizerPoints(midP2, midP5, midP3, ctrl4, nIter, currIter+1)
+        midP6 = getMidPoint(midP4, midP5)
 
-        plt.pause(0.5)
+        plt.plot([ctrl1[0], midP1[0], midP2[0], midP3[0], ctrl4[0]], [ctrl1[1], midP1[1], midP2[1], midP3[1], ctrl4[1]], color=lc[currIter], marker='o', linestyle='-')
+        
+        # // left
+        PopulateBeizerPoints(ctrl1, midP1, midP4, midP6, nIter, currIter+1)
+        beizerPoint.append(midP6)
+        # // right
+        PopulateBeizerPoints(midP6, midP5, midP3, ctrl4, nIter, currIter+1)
+
+        plt.pause(0.0005)
 
 
 if __name__ == "__main__":
@@ -52,7 +55,8 @@ if __name__ == "__main__":
 
         if i != nIter-1:
             beizerPoint.clear()
+
     
-    print(beizerPoint, len(beizerPoint))
-    plt.plot([point[0] for point in beizerPoint], [point[1] for point in beizerPoint], 'ro-')
+    plt.plot([point[0] for point in beizerPoint], [point[1] for point in beizerPoint], 'ro-', linewidth=5)
+    print(beizerPoint)
     plt.show()
