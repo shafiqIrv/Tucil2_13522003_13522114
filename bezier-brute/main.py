@@ -4,9 +4,16 @@ from plotter import *
 from bezier_brute import *
 
 if __name__ == "__main__":
-    control_points = [(20, 10), (45, 70), (70, 35), (90, 80), (10, 60)]
-    N = 300
+    control_points = []
+    N = int(input("Jumlah control points: "))
+    for i in range(N):
+        inpt  = input(f"Masukkan Control Point {i+1} (X Y): ")
+        temp = tuple(map(float, inpt.split(" ")))
+        control_points.append(temp)
+
+    N = int(input("Jumlah Titik (semakin banyak semakin mendetail): "))
     time_gap = 5 / N
+
     start = time.time()
     result = bezier_curve(control_points, N)
     end = time.time()
@@ -22,10 +29,13 @@ if __name__ == "__main__":
         plt.pause(time_gap)
 
     plt.clf()
-    plt.title("Points Plotted as Curve")
-    plt.xlabel("X-axis label", labelpad=20, loc="center", rotation="horizontal")
-    plt.ylabel("Y-axis label", labelpad=20, loc="center", rotation="vertical")
+    plt.title("Bezier Curve - Brute Force (de casteljau)")
+    plt.xlabel("X", labelpad=20, loc="center", rotation="horizontal")
+    plt.ylabel("Y", labelpad=20, loc="center", rotation="vertical")
+    plt.plot()
+    plot_with_marker(control_points)
     plot_points_as_line(result)
+    plt.legend()
     fig = plt.gcf()
     text = "Processing time : " + str(end - start) + " seconds"
     fig.text(0.5, 0.01, text, ha="center", fontsize=12, color="black")
