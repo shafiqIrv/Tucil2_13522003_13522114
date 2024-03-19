@@ -200,7 +200,7 @@ def runDNC():
     
     nIter = int(EntryIteration.get())
 
-    if (nIter > 0 and len(controlPoints) >= 3):
+    if (nIter > 0 and len(controlPoints) >= 2):
         lc = [(np.random.random(), np.random.random(), np.random.random()) for i in range(nIter+1)]
 
 
@@ -248,7 +248,7 @@ def animateDNC():
     global nIter, lc
     nIter = int(EntryIteration.get())
 
-    if (nIter > 0 and len(controlPoints) >= 3):
+    if (nIter > 0 and len(controlPoints) >= 2):
         lc = [(np.random.random(), np.random.random(), np.random.random()) for i in range(nIter+1)]
 
         ax.clear()
@@ -299,7 +299,7 @@ def runBF():
 
     N = int(EntryBFIteration.get())
 
-    if (N > 0 and len(controlPoints) >= 3):
+    if (N > 0 and len(controlPoints) >= 2):
         start = time.time()
         result = bezier_curve(controlPoints, N)
         end = time.time()
@@ -336,7 +336,7 @@ def animateBF():
 
     N = int(EntryBFIteration.get())
 
-    if (N > 0 and len(controlPoints) >= 3):
+    if (N > 0 and len(controlPoints) >= 2):
         result = bezier_curve(controlPoints, N)
 
         for i in range(len(result) - 1):
