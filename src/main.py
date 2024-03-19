@@ -3,9 +3,11 @@ from tkinter import Scrollbar
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
+import time
+
+# Handle the DPI different between Tkinter and Matplotlib
 import ctypes
 ctypes.windll.shcore.SetProcessDpiAwareness(0)
-import time
 
 
 # DATA
@@ -16,12 +18,12 @@ nIter = None
 N = None
 isProcessing = False
 
-
-
+# Fungsi menghitung titik tengah antar 2 pasang titik
 def getMidPoint(P1, P2):
     return ((P1[0] + P2[0]) / 2), ((P1[1] + P2[1]) / 2)
 
 
+# mencari semua titik kurva bezier secara rekursif dengan nilai t menggunakan algoritma de casteljau
 def de_casteljau(control_points, t):
     if len(control_points) == 1:
         return control_points[0]
@@ -34,6 +36,7 @@ def de_casteljau(control_points, t):
         return de_casteljau(new_points, t)
 
 
+# Iterasi nilai t untuk semua titik kurva bezier pada range 0<t<=1 dengan t = 1/n
 def bezier_curve(control_points, n):
     curve = []
     for t in [i / n for i in range(n + 1)]:
@@ -41,6 +44,7 @@ def bezier_curve(control_points, n):
     return curve
 
 
+# Fungsi pembentukan kurva bezier kuadratik
 def quadraticBezier(ctrl1, ctrl2, ctrl3, limIter, currIter=0):
     if (currIter < limIter):
         midP1 = getMidPoint(ctrl1, ctrl2)
@@ -57,6 +61,7 @@ def quadraticBezier(ctrl1, ctrl2, ctrl3, limIter, currIter=0):
         quadraticBezier(midP3, midP2, ctrl3, limIter, currIter+1)
 
 
+# Fungsi animasi proses pembentukan kurva bezier kuadratik
 def animateQuadraticBezier(ctrl1, ctrl2, ctrl3, limIter, currIter=0):
     if (currIter < limIter):
         midP1 = getMidPoint(ctrl1, ctrl2)
@@ -76,6 +81,7 @@ def animateQuadraticBezier(ctrl1, ctrl2, ctrl3, limIter, currIter=0):
         fig.canvas.start_event_loop(0.00005)
 
 
+# Fungsi pembentukan kurva bezier berorde N
 def NthBezier(controlPoints, limIter, currIter=0):
     if (currIter < limIter):
         midPoints = controlPoints.copy()
@@ -105,6 +111,7 @@ def NthBezier(controlPoints, limIter, currIter=0):
         NthBezier(right, nIter, currIter+1)
 
 
+# Fungsi animasi proses pembentukan kurva bezier berorde N
 def animateNthBezier(controlPoints, limIter, currIter=0):
     if (currIter < limIter):
         midPoints = controlPoints.copy()
@@ -142,6 +149,7 @@ def animateNthBezier(controlPoints, limIter, currIter=0):
         fig.canvas.start_event_loop(0.00005)
 
 
+# Fungsi menambahkan koordinat titik melalui klik pada grafik
 def clickPoint(event):
     if not isProcessing:
         if event.button == 1:  # Left mouse button click
@@ -153,6 +161,7 @@ def clickPoint(event):
                 update_control_points_list()
 
 
+# Fungsi menampilkan grafik
 def show_plot():
     ax.clear()
     EntryPoint.config(text=(str(len(controlPoints))))
@@ -166,12 +175,14 @@ def show_plot():
     fig.canvas.draw()
 
 
+# Fungsi memperbarui senarai titik kontrol
 def update_control_points_list():
     control_points_list.delete(0, tk.END)
     for i, point in enumerate(controlPoints, start=1):
         control_points_list.insert(tk.END, f"{i}) {point[0]}, {point[1]}")
-    
 
+
+# Fungsi menambahkan koordinat titik dari pengetikan manual
 def addTypedPoint():
     try:
         x, y = map(lambda coord: float("{:.3f}".format(float(coord))), EntryAddPoint.get().split())
@@ -184,12 +195,14 @@ def addTypedPoint():
         tk.messagebox.showerror("Error", "Invalid input format. Please enter coordinates in the format 'X Y'.")
 
 
+# Fungsi menghapus seluruh titik kontrol
 def clearControlPoints():
     controlPoints.clear()
     update_control_points_list()
     show_plot()
 
 
+# Fungsi pemanggilan algoritma DNC dan menampilkan waktu eksekusi
 def runDNC():
     global isProcessing
     isProcessing = True
@@ -239,6 +252,7 @@ def runDNC():
     isProcessing = False
 
 
+# Fungsi pemanggilan animasi pembentukan kurva bezier
 def animateDNC():
     global isProcessing
     isProcessing = True
@@ -289,6 +303,8 @@ def animateDNC():
 
     isProcessing = False
 
+
+# Fungsi pemanggilan algoritma bruteforce dan menampilkan waktu eksekusi
 def runBF():
     global isProcessing
     isProcessing = True
@@ -326,6 +342,7 @@ def runBF():
     isProcessing = False
 
 
+# Fungsi pemanggilan animasi algoritma bruteforce
 def animateBF():
     global isProcessing
     isProcessing = True
@@ -371,8 +388,9 @@ custFont = 'Tahoma'
 
 # Initialize plot canvas
 fig, ax = plt.subplots()
-# ax.set_xlim(-200, 200)
-# ax.set_ylim(-200, 200)
+ax.set_title('Click to add points')
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
 fig.canvas.mpl_connect('button_press_event', clickPoint)
 
 canvas = FigureCanvasTkAgg(fig, master=root)
