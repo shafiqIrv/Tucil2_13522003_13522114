@@ -18,7 +18,7 @@ if __name__ == "__main__":
     result = bezier_curve(control_points, N)
     end = time.time()
 
-    for i in range(len(result) - 1):
+    for i in range(len(result)):
         plt.plot(
             [result[i][0], result[i + 1][0]],
             [result[i][1], result[i + 1][1]],
