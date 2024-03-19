@@ -10,11 +10,7 @@
 
 
 ## General Information
-- Provide general information about your project here.
-- What problem does it (intend to) solve?
-- What is the purpose of your project?
-- Why did you undertake it?
-
+- Membangun Kurva Bézier dengan Algoritma Titik Tengah berbasis Divide and Conquer
 
 ## Technologies Used
 - Python
